@@ -1,3 +1,4 @@
+# ---------------------------------- IMPORTS ----------------------------------
 from flask import Flask, render_template, redirect, url_for
 from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
@@ -6,20 +7,22 @@ from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired, URL
 from flask_ckeditor import CKEditor, CKEditorField
 
-
+# ---------------------------------- SERVER -----------------------------------
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '8BYkEfBA6O6donzWlSihBXox7C0sKR6b'
 ckeditor = CKEditor(app)
 Bootstrap(app)
 
-# CONNECT TO DB
+# ---------------------------------- DATABASE ---------------------------------
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///posts.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 
-# CONFIGURE TABLE
+# ---------------------------------- CLASSES ----------------------------------
+
 class BlogPost(db.Model):
+    # Database Table
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(250), unique=True, nullable=False)
     subtitle = db.Column(db.String(250), nullable=False)
@@ -29,8 +32,8 @@ class BlogPost(db.Model):
     img_url = db.Column(db.String(250), nullable=False)
 
 
-##WTForm
 class CreatePostForm(FlaskForm):
+    # Form
     title = StringField("Blog Post Title", validators=[DataRequired()])
     subtitle = StringField("Subtitle", validators=[DataRequired()])
     author = StringField("Your Name", validators=[DataRequired()])
@@ -39,13 +42,17 @@ class CreatePostForm(FlaskForm):
     submit = SubmitField("Submit Post")
 
 
-# TODO - FETCH AND IMPLEMENT BLOG POSTS FROM THE DB
-# TODO - THEN, FORMAT THEM INTO A VARIABLE CALLED "posts".
-posts = db.session.query(BlogPost).all()
-print(posts)
+# --------------------------------- FUNCTIONS ---------------------------------
+def get_all_posts():
+    posts = db.session.query(BlogPost).all()
+    return posts
+
+
+# ---------------------------------- ROUTING ----------------------------------
 
 @app.route('/')
-def get_all_posts():
+def home():
+    posts = get_all_posts()
     return render_template("index.html", all_posts=posts)
 
 
@@ -68,6 +75,6 @@ def contact():
     return render_template("contact.html")
 
 
+# ---------------------------------- RUNNING ----------------------------------
 if __name__ == "__main__":
-    #app.run(host='0.0.0.0', port=5000, debug=True)
     app.run(debug=True)

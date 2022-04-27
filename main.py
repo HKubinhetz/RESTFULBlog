@@ -5,24 +5,20 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired, URL
 from flask_ckeditor import CKEditor, CKEditorField
-import requests
 
-
-## Delete this code:
-# import requests
-posts = requests.get("https://api.npoint.io/43644ec4f0013682fc0d").json()
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '8BYkEfBA6O6donzWlSihBXox7C0sKR6b'
 ckeditor = CKEditor(app)
 Bootstrap(app)
 
-##CONNECT TO DB
+# CONNECT TO DB
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///posts.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
-##CONFIGURE TABLE
+
+# CONFIGURE TABLE
 class BlogPost(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(250), unique=True, nullable=False)
@@ -42,6 +38,11 @@ class CreatePostForm(FlaskForm):
     body = StringField("Blog Content", validators=[DataRequired()])
     submit = SubmitField("Submit Post")
 
+
+# TODO - FETCH AND IMPLEMENT BLOG POSTS FROM THE DB
+# TODO - THEN, FORMAT THEM INTO A VARIABLE CALLED "posts".
+posts = db.session.query(BlogPost).all()
+print(posts)
 
 @app.route('/')
 def get_all_posts():

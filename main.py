@@ -59,10 +59,9 @@ def home():
 def show_post(index):
     posts = db.session.query(BlogPost).all()
     requested_post = posts[index]
-
-    post_index = posts.index(requested_post)
+    # TODO - MAKE THIS BABY WORK
     for blog_post in posts:
-        if blog_post[post_index] == index:
+        if posts.index(blog_post) == index:
             requested_post = blog_post
     return render_template("post.html", post=requested_post)
 

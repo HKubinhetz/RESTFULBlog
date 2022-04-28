@@ -60,8 +60,9 @@ def show_post(index):
     posts = db.session.query(BlogPost).all()
     requested_post = posts[index]
 
+    post_index = posts.index(requested_post)
     for blog_post in posts:
-        if blog_post["id"] == index:
+        if blog_post[post_index] == index:
             requested_post = blog_post
     return render_template("post.html", post=requested_post)
 

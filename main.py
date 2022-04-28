@@ -49,7 +49,6 @@ def get_all_posts():
 
 
 # ---------------------------------- ROUTING ----------------------------------
-
 @app.route('/')
 def home():
     posts = get_all_posts()
@@ -58,7 +57,9 @@ def home():
 
 @app.route("/post/<int:index>")
 def show_post(index):
-    requested_post = None
+    posts = db.session.query(BlogPost).all()
+    requested_post = posts[index]
+
     for blog_post in posts:
         if blog_post["id"] == index:
             requested_post = blog_post

@@ -59,12 +59,18 @@ def home():
 def show_post(index):
     posts = db.session.query(BlogPost).all()
     requested_post = posts[index]
-    # TODO - MAKE THIS BABY WORK
 
     for blog_post in posts:
-        if posts.index(blog_post) == index:
+        # +1 because for index correction
+        if posts.index(blog_post) + 1 == index:
             requested_post = blog_post
     return render_template("post.html", post=requested_post)
+
+
+@app.route("/edit")
+def edit_post():
+    posts = db.session.query(BlogPost).all()
+    return render_template("index.html", all_posts=posts)
 
 
 @app.route("/about")

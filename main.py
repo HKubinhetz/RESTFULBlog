@@ -60,6 +60,7 @@ def show_post(index):
     posts = db.session.query(BlogPost).all()
     requested_post = posts[index]
     # TODO - MAKE THIS BABY WORK
+
     for blog_post in posts:
         if posts.index(blog_post) == index:
             requested_post = blog_post

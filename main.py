@@ -58,6 +58,8 @@ def home():
 
 @app.route("/post/<int:index>")
 def show_post(index):
+    # Show Post routing, this is the function activated when the user wants
+    # to open a specific blog post.
     posts = db.session.query(BlogPost).all()
     requested_post = posts[index]
 

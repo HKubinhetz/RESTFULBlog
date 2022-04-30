@@ -51,6 +51,7 @@ def get_all_posts():
 # ---------------------------------- ROUTING ----------------------------------
 @app.route('/')
 def home():
+    # Default Home routing. This function renders the homepage of the blog.
     posts = get_all_posts()
     return render_template("index.html", all_posts=posts)
 

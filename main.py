@@ -72,6 +72,7 @@ def show_post(index):
 
 @app.route("/edit")
 def edit_post():
+    # Edit post routing, for when the client wants to change post info.
     posts = db.session.query(BlogPost).all()
     return render_template("index.html", all_posts=posts)
 

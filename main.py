@@ -85,6 +85,7 @@ def about():
 
 @app.route("/contact")
 def contact():
+    # Contact routing, for when the client clicks "contact"
     return render_template("contact.html")
 
 

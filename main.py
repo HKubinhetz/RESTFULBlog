@@ -79,6 +79,7 @@ def edit_post():
 
 @app.route("/about")
 def about():
+    # About routing, for when the client clicks "About"
     return render_template("about.html")
 
 

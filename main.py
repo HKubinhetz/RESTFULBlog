@@ -70,11 +70,18 @@ def show_post(index):
     return render_template("post.html", post=requested_post)
 
 
+@app.route("/new-post")
+def create_post():
+    # Create post routing, for when the client wants to create a new post.
+    posts = db.session.query(BlogPost).all()
+    return render_template("make-post.html", all_posts=posts, post_form=CreatePostForm)
+
+
 @app.route("/edit")
 def edit_post():
     # Edit post routing, for when the client wants to change post info.
     posts = db.session.query(BlogPost).all()
-    return render_template("index.html", all_posts=posts)
+    return render_template("make-post.html", all_posts=posts)
 
 
 @app.route("/about")

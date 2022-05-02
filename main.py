@@ -83,6 +83,10 @@ def create_post():
         print(create_post_form.author.data)
         print(create_post_form.img_url.data)
         print(create_post_form.body.data)
+
+        # TODO - WHEN POST COMPLETE, REDIRECT TO HOMEPAGE!
+        # return render_template("index.html", all_posts=posts)
+
     return render_template("make-post.html", all_posts=posts, form=create_post_form)
 
 

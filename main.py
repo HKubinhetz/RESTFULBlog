@@ -73,8 +73,9 @@ def show_post(index):
 @app.route("/new-post")
 def create_post():
     # Create post routing, for when the client wants to create a new post.
+    create_post_form = CreatePostForm()
     posts = db.session.query(BlogPost).all()
-    return render_template("make-post.html", all_posts=posts, form=CreatePostForm)
+    return render_template("make-post.html", all_posts=posts, form=create_post_form)
 
 
 @app.route("/edit")

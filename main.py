@@ -38,7 +38,8 @@ class CreatePostForm(FlaskForm):
     subtitle = StringField("Subtitle", validators=[DataRequired()])
     author = StringField("Your Name", validators=[DataRequired()])
     img_url = StringField("Blog Image URL", validators=[DataRequired(), URL()])
-    body = StringField("Blog Content", validators=[DataRequired()])
+    # body = StringField("Blog Content", validators=[DataRequired()])
+    body = CKEditorField('Body')
     submit = SubmitField("Submit Post")
 
 
@@ -70,11 +71,18 @@ def show_post(index):
     return render_template("post.html", post=requested_post)
 
 
-@app.route("/new-post")
+@app.route("/new-post", methods=["GET", "POST"])
 def create_post():
     # Create post routing, for when the client wants to create a new post.
     create_post_form = CreatePostForm()
     posts = db.session.query(BlogPost).all()
+
+    if create_post_form.validate_on_submit():
+        print(create_post_form.title.data)
+        print(create_post_form.subtitle.data)
+        print(create_post_form.author.data)
+        print(create_post_form.img_url.data)
+        print(create_post_form.body.data)
     return render_template("make-post.html", all_posts=posts, form=create_post_form)
 
 

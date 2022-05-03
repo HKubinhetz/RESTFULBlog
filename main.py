@@ -107,7 +107,7 @@ def create_post():
     return render_template("make-post.html", all_posts=posts, form=create_post_form, page_header="New Post")
 
 
-@app.route("/edit/<int:index>")
+@app.route("/edit/<int:index>", methods=["GET", "POST"])
 def edit_post(index):
     # Edit post routing, for when the client wants to change post info.
     posts = db.session.query(BlogPost).all()
@@ -125,7 +125,30 @@ def edit_post(index):
         author=requested_post.author,
         body=requested_post.body
     )
+
+    if edit_post_form.validate_on_submit():
+        post_to_edit = db.session.query(BlogPost).filter_by(id=index).first()
+
+        post_to_edit.title = edit_post_form.title.data
+        post_to_edit.subtitle = edit_post_form.subtitle.data
+        post_to_edit.body = edit_post_form.body.data
+        post_to_edit.author = edit_post_form.author.data
+        post_to_edit.img_url = edit_post_form.img_url.data
+
+        db.session.commit()
+        posts = get_all_posts()
+        return render_template("index.html", all_posts=posts)
+
     return render_template("make-post.html", all_posts=posts, form=edit_post_form, page_header="Edit Post")
+
+
+@app.route("/delete/<int:index>", methods=["GET", "POST"])
+def delete_post(index):
+    post_to_delete = db.session.query(BlogPost).filter_by(id=index).first()
+    db.session.delete(post_to_delete)
+    db.session.commit()
+    posts = get_all_posts()
+    return render_template("index.html", all_posts=posts)
 
 
 @app.route("/about")

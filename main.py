@@ -107,11 +107,19 @@ def create_post():
     return render_template("make-post.html", all_posts=posts, form=create_post_form)
 
 
-@app.route("/edit")
-def edit_post():
+@app.route("/edit/<int:index>")
+def edit_post(index):
     # Edit post routing, for when the client wants to change post info.
     posts = db.session.query(BlogPost).all()
-    return render_template("make-post.html", all_posts=posts)
+    requested_post = posts[index - 1]
+
+    for blog_post in posts:
+        # +1 because for index correction
+        if posts.index(blog_post) + 1 == index:
+            requested_post = blog_post
+
+    create_post_form = CreatePostForm()
+    return render_template("make-post.html", all_posts=posts, form=create_post_form)
 
 
 @app.route("/about")

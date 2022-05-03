@@ -6,6 +6,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired, URL
 from flask_ckeditor import CKEditor, CKEditorField
+from sqlalchemy import exc
 import blog_timing
 
 
@@ -80,16 +81,26 @@ def create_post():
     posts = db.session.query(BlogPost).all()
 
     if create_post_form.validate_on_submit():
-        print(create_post_form.title.data)
-        print(create_post_form.subtitle.data)
-        print(create_post_form.author.data)
-        print(create_post_form.img_url.data)
-        print(create_post_form.body.data)
-        current_date = blog_timing.get_post_timing()
-        print(current_date)
 
-        # TODO - WHEN POST COMPLETE, REDIRECT TO HOMEPAGE!
-        # return render_template("index.html", all_posts=posts)
+        new_post = BlogPost(
+            title=create_post_form.title.data,
+            subtitle=create_post_form.subtitle.data,
+            date=blog_timing.get_post_timing(),
+            body=create_post_form.body.data,
+            author=create_post_form.author.data,
+            img_url=create_post_form.img_url.data,
+        )
+
+        try:
+            # Creating a new Cafe to the Database.
+            db.session.add(new_post)  # Adding the Post
+            db.session.commit()  # Commiting the Change.
+
+        except exc.IntegrityError:
+            # If Post already exists, the code returns an error message.
+            print("Error! Post already exists!")
+
+        return render_template("index.html", all_posts=posts)
 
     return render_template("make-post.html", all_posts=posts, form=create_post_form)
 

@@ -65,7 +65,7 @@ def show_post(index):
     # Show Post routing, this is the function activated when the user wants
     # to open a specific blog post.
     posts = db.session.query(BlogPost).all()
-    requested_post = posts[index]
+    requested_post = posts[index-1]
 
     for blog_post in posts:
         # +1 because for index correction
@@ -100,8 +100,10 @@ def create_post():
             # If Post already exists, the code returns an error message.
             print("Error! Post already exists!")
 
+        posts = get_all_posts()
         return render_template("index.html", all_posts=posts)
 
+    posts = get_all_posts()
     return render_template("make-post.html", all_posts=posts, form=create_post_form)
 
 

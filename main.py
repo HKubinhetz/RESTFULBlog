@@ -104,7 +104,7 @@ def create_post():
         return render_template("index.html", all_posts=posts)
 
     posts = get_all_posts()
-    return render_template("make-post.html", all_posts=posts, form=create_post_form)
+    return render_template("make-post.html", all_posts=posts, form=create_post_form, page_header="New Post")
 
 
 @app.route("/edit/<int:index>")
@@ -118,8 +118,14 @@ def edit_post(index):
         if posts.index(blog_post) + 1 == index:
             requested_post = blog_post
 
-    create_post_form = CreatePostForm()
-    return render_template("make-post.html", all_posts=posts, form=create_post_form)
+    edit_post_form = CreatePostForm(
+        title=requested_post.title,
+        subtitle=requested_post.subtitle,
+        img_url=requested_post.img_url,
+        author=requested_post.author,
+        body=requested_post.body
+    )
+    return render_template("make-post.html", all_posts=posts, form=edit_post_form, page_header="Edit Post")
 
 
 @app.route("/about")

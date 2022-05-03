@@ -6,12 +6,15 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired, URL
 from flask_ckeditor import CKEditor, CKEditorField
+import blog_timing
+
 
 # ---------------------------------- SERVER -----------------------------------
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '8BYkEfBA6O6donzWlSihBXox7C0sKR6b'
 ckeditor = CKEditor(app)
 Bootstrap(app)
+
 
 # ---------------------------------- DATABASE ---------------------------------
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///posts.db'
@@ -20,7 +23,6 @@ db = SQLAlchemy(app)
 
 
 # ---------------------------------- CLASSES ----------------------------------
-
 class BlogPost(db.Model):
     # Database Table
     id = db.Column(db.Integer, primary_key=True)
@@ -83,6 +85,8 @@ def create_post():
         print(create_post_form.author.data)
         print(create_post_form.img_url.data)
         print(create_post_form.body.data)
+        current_date = blog_timing.get_post_timing()
+        print(current_date)
 
         # TODO - WHEN POST COMPLETE, REDIRECT TO HOMEPAGE!
         # return render_template("index.html", all_posts=posts)
